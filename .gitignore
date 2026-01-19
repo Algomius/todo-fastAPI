@@ -1,0 +1,9 @@
+# Cache Python
+__pycache__/
+
+# Environnement virtuel Python
+.venv/
+venv/
+
+# Dossier propre à VSCODE
+.vscode/
