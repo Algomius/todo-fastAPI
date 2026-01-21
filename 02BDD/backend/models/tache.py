@@ -1,11 +1,5 @@
-from sqlalchemy import Column, Integer, String, Date, Enum
+from sqlalchemy import Column, Integer, String, Date
 from db.database import Base
-import enum
-
-class EtatEnum(enum.Enum):
-    AFAIRE = "A faire"
-    ENCOURS = "En cours"
-    TERMINE = "Terminé"
 
 class Tache(Base):
     __tablename__ = "tache"
