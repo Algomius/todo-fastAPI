@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from schemas.tachecreation import TacheCreation
 from schemas.tachemiseajour import TacheMiseajour
 from db.database import SessionLocal
@@ -12,6 +13,8 @@ def get_db():
     finally:
         db.close()
 
+
+
 app = FastAPI(title="API de gestion des tâches", 
               description=
               """
@@ -22,6 +25,20 @@ app = FastAPI(title="API de gestion des tâches",
                 - Mettre à jour une tâche
                 - Supprimer une tâche
               """)
+
+origins = [
+    "http://localhost:3000",  # React
+    "http://127.0.0.1:5500",  # fichier HTML ouvert directement
+    "*"                       #  '*' pour autoriser tous les fronts (dev seulement)
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,        # quelles origines sont autorisées
+    allow_credentials=True,
+    allow_methods=["*"],          # GET, POST, PUT, DELETE etc.
+    allow_headers=["*"],          # autoriser tous les headers
+)
 
 @app.get("/taches/",
          summary="Récupérer toutes les tâches",
@@ -39,11 +56,11 @@ def getTache(tache_id : int, db : Session = Depends(get_db)):
 
 @app.post("/taches/")
 def createTache(t : TacheCreation, db : Session = Depends(get_db)):
-    try:
-        db_tache = crud.tache.createTache(t, db)
-        return db_tache
-    except Exception:
-        raise HTTPException(status_code=500, detail="Erreur interne")
+    #try:
+    db_tache = crud.tache.createTache(t, db)
+    return db_tache
+    #except Exception:
+    #    raise HTTPException(status_code=500, detail="Erreur interne")
 
 @app.put("/taches/{tache_id}")
 def updateTache(tache_id : int, t : TacheMiseajour, db : Session = Depends(get_db)):
