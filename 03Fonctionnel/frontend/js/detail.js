@@ -1,8 +1,96 @@
+async function miseAjour(e) {
+    event.preventDefault();
+    try {
+        let id = -1;
+        if (searchParams.has('tache')) {
+            id = parseInt(searchParams.get('tache'));
+        }
+        const select = document.getElementById("etat");
+        const texte = select.options[select.selectedIndex].text;
+        const modifTache = {
+            titre: document.getElementById("titre").value,
+            description: document.getElementById("description").value,
+            etat: texte,
+            dateEch: document.getElementById("dateEch").value
+        };
+        console.log(JSON.stringify(modifTache))
+        const response = await fetch(`http://localhost:8000/taches/${id}`, {
+            method: "PUT",             
+            headers: {
+                "Content-Type": "application/json" 
+            },
+            body: JSON.stringify(modifTache) 
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP ! statut : ${response.status}`);
+        }
+
+        const data = await response.json();
+        window.location.href = "index.html?ajouter=" + data.id;
+
+    } catch (error) {
+        console.error("Erreur lors de la création :", error);
+    }
+}
+
+async function ajouter(e) {
+    event.preventDefault();
+    try {
+        const select = document.getElementById("etat");
+        const texte = select.options[select.selectedIndex].text;
+        const nouvelleTache = {
+            titre: document.getElementById("titre").value,
+            description: document.getElementById("description").value,
+            etat: texte,
+            dateEch: document.getElementById("dateEch").value
+        };
+        console.log(JSON.stringify(nouvelleTache))
+        const response = await fetch("http://localhost:8000/taches/", {
+            method: "POST",             
+            headers: {
+                "Content-Type": "application/json" 
+            },
+            body: JSON.stringify(nouvelleTache) 
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP ! statut : ${response.status}`);
+        }
+
+        const data = await response.json();
+        window.location.href = "index.html?ajouter=" + data.id;
+
+    } catch (error) {
+        console.error("Erreur lors de la création :", error);
+    }
+}
+
+
 /* Fonction qui affiche les informations d'une tâche dans la page de détail, a remplacer par un appel à l'API */
-function genererDetailModification(idTache) {
+async function genererDetailModification(idTache) {
     titreH1 = document.getElementById("titreH1");
     titreH1.innerHTML = "Modifier une tâche";
-    let tacheJSON = dataTaches.find(t=>t.id === idTache);
+
+    let tacheJSON = "";
+    let id = -1;
+    if (searchParams.has('tache')) {
+        id = parseInt(searchParams.get('tache'));
+    }
+
+    try {
+        const response = await fetch(`http://localhost:8000/taches/${id}`);
+
+        if (!response.ok) {
+            throw new Error("Tâche introuvable");
+        }
+
+        
+        tacheJSON = await response.json();
+
+    } catch (error) {
+        console.error(error);
+    }    
 
     let titreTache = document.getElementById("titre");
     titreTache.value = tacheJSON.titre;
@@ -11,17 +99,22 @@ function genererDetailModification(idTache) {
     descriptionTache.value = tacheJSON.description;
 
     let etatTache = document.getElementById("etat");
-    etatTache.value = tacheJSON.etat;
+    for (const option of etatTache.options) {
+        if (option.text === tacheJSON.etat) {
+        etatTache.value = option.value;
+        break;
+        }
+    }
+
+    let dateEch = document.getElementById("dateEch");
+    dateEch.value = tacheJSON.dateEch;
 
     let actions = document.getElementById("actions");
     let lienModifier = document.createElement("a");
     lienModifier.innerText = "Modifier";
     lienModifier.href = "index.html?modifier=" + idTache;
     lienModifier.id = "lienModifier";
-    lienModifier.addEventListener('click', function(e) {
-        // Event listener pour appeler l'API pour modifier
-        console.log("Clique sur modifier")
-    });
+    lienModifier.addEventListener('click', miseAjour);
     actions.appendChild(lienModifier);
     let lienAnnuler = document.createElement("a");
     lienAnnuler.innerText = "Annuler";
@@ -38,12 +131,7 @@ function genererDetailAjout(idTache) {
     lienAjouter.innerText = "Ajouter";
     lienAjouter.href = "index.html?ajouter=1";
     lienAjouter.id = "lienAjouter";
-    lienAjouter.addEventListener('click', function(e) {
-        // Event listener pour appeler l'API pour ajouter
-        console.log("Clique sur ajouter")
-    });
-
-
+    lienAjouter.addEventListener('click', ajouter);
     actions.appendChild(lienAjouter);
     let lienAnnuler = document.createElement("a");
     lienAnnuler.innerText = "Annuler";

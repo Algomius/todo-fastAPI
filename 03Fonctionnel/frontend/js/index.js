@@ -1,3 +1,19 @@
+async function supprimer(e) {
+    if (e.target.classList.contains('LienSuppression')) {
+        event.preventDefault();
+        try {
+            const todoId = parseInt(e.target.getAttribute('id').slice(5));
+            const response = await fetch(`http://localhost:8000/taches/${todoId}`, {
+                method: "DELETE"
+            });
+            if (!response.ok) throw new Error("Erreur suppression");
+            console.log(`Tâche ${todoId} supprimée`);
+            window.location.href = "index.html?supprimerTache=" + todoId;
+        } catch  (error) {
+            console.error(error);
+        }
+    }
+}
 
 /* Fonction qui génère une information en cas de modification */
 function genererinfo() {
@@ -43,8 +59,8 @@ async function genererListe() {
 
     /* Parcourir les données d'actualité */
     try {
-      const res = await fetch("http://localhost:8000/taches/");
-      const dataTaches = await res.json();
+        const res = await fetch("http://localhost:8000/taches/");
+        const dataTaches = await res.json();
 
         for (let dataElement of dataTaches) {
             let tachesTableLigne = document.createElement("tr");
@@ -67,19 +83,8 @@ async function genererListe() {
     } catch (err) {
       console.error(err);
     }
-
+    taches.addEventListener('click', supprimer);
     taches.appendChild(tachesTable);
-
-    taches.addEventListener('click', function(e) {
-    if (e.target.classList.contains('LienSuppression')) {
-        
-        const todoId = e.target.getAttribute('id');
-        
-        // C'est ici que se passe l'appel à l'API pour la suppression
-        console.log('Suppression de la tâche', todoId);
-        
-    }
-});
 }
 
 genererinfo();
