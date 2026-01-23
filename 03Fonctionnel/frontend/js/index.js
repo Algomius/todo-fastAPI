@@ -7,11 +7,21 @@ async function supprimer(e) {
                 method: "DELETE"
             });
             if (!response.ok) throw new Error("Erreur suppression");
-            console.log(`Tâche ${todoId} supprimée`);
             window.location.href = "index.html?supprimerTache=" + todoId;
         } catch  (error) {
             console.error(error);
         }
+    }
+}
+
+async function donneTaches() {
+    try {
+        const res = await fetch("http://localhost:8000/taches/");
+        const dataTaches = await res.json();
+        return dataTaches
+    } catch (err) {
+      console.error(err);
+      return null;
     }
 }
 
@@ -58,9 +68,11 @@ async function genererListe() {
     tachesTable.appendChild(tachesTableEntete);
 
     /* Parcourir les données d'actualité */
-    try {
-        const res = await fetch("http://localhost:8000/taches/");
-        const dataTaches = await res.json();
+
+    const dataTaches = await donneTaches();
+    console.log(dataTaches)
+
+    if (dataTaches != null) {
 
         for (let dataElement of dataTaches) {
             let tachesTableLigne = document.createElement("tr");
@@ -80,8 +92,6 @@ async function genererListe() {
             tachesTableLigne.appendChild(tachesTableLigneSupprimer);   
             tachesTable.appendChild(tachesTableLigne);
         } 
-    } catch (err) {
-      console.error(err);
     }
     taches.addEventListener('click', supprimer);
     taches.appendChild(tachesTable);

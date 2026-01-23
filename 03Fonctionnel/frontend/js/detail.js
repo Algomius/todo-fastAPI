@@ -13,7 +13,6 @@ async function miseAjour(e) {
             etat: texte,
             dateEch: document.getElementById("dateEch").value
         };
-        console.log(JSON.stringify(modifTache))
         const response = await fetch(`http://localhost:8000/taches/${id}`, {
             method: "PUT",             
             headers: {
@@ -37,15 +36,12 @@ async function miseAjour(e) {
 async function ajouter(e) {
     event.preventDefault();
     try {
-        const select = document.getElementById("etat");
-        const texte = select.options[select.selectedIndex].text;
         const nouvelleTache = {
             titre: document.getElementById("titre").value,
             description: document.getElementById("description").value,
-            etat: texte,
+            etat: document.getElementById("etat").value,
             dateEch: document.getElementById("dateEch").value
         };
-        console.log(JSON.stringify(nouvelleTache))
         const response = await fetch("http://localhost:8000/taches/", {
             method: "POST",             
             headers: {
@@ -66,48 +62,48 @@ async function ajouter(e) {
     }
 }
 
+async function donneTacheDetail() {
+    try {
+        if (searchParams.has('tache')) {
+            let id = parseInt(searchParams.get('tache'));
+            const response = await fetch(`http://localhost:8000/taches/${id}`);
+
+            if (!response.ok) {
+                throw new Error("Tâche introuvable");
+            }
+            let tacheJSON = await response.json();
+            return tacheJSON;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error(error);
+        return null;
+    } 
+}
+
 
 /* Fonction qui affiche les informations d'une tâche dans la page de détail, a remplacer par un appel à l'API */
 async function genererDetailModification(idTache) {
     titreH1 = document.getElementById("titreH1");
     titreH1.innerHTML = "Modifier une tâche";
 
-    let tacheJSON = "";
-    let id = -1;
-    if (searchParams.has('tache')) {
-        id = parseInt(searchParams.get('tache'));
+    let tacheJSON = await donneTacheDetail();
+
+    if (tacheJSON != null) {
+
+        let titreTache = document.getElementById("titre");
+        titreTache.value = tacheJSON.titre;
+
+        let descriptionTache = document.getElementById("description");
+        descriptionTache.value = tacheJSON.description;
+
+        let etatTache = document.getElementById("etat");
+        etatTache.value = tacheJSON.etat;
+
+        let dateEch = document.getElementById("dateEch");
+        dateEch.value = tacheJSON.dateEch;
     }
-
-    try {
-        const response = await fetch(`http://localhost:8000/taches/${id}`);
-
-        if (!response.ok) {
-            throw new Error("Tâche introuvable");
-        }
-
-        
-        tacheJSON = await response.json();
-
-    } catch (error) {
-        console.error(error);
-    }    
-
-    let titreTache = document.getElementById("titre");
-    titreTache.value = tacheJSON.titre;
-
-    let descriptionTache = document.getElementById("description");
-    descriptionTache.value = tacheJSON.description;
-
-    let etatTache = document.getElementById("etat");
-    for (const option of etatTache.options) {
-        if (option.text === tacheJSON.etat) {
-        etatTache.value = option.value;
-        break;
-        }
-    }
-
-    let dateEch = document.getElementById("dateEch");
-    dateEch.value = tacheJSON.dateEch;
 
     let actions = document.getElementById("actions");
     let lienModifier = document.createElement("a");
