@@ -1,96 +1,13 @@
-async function miseAjour(e) {
-    event.preventDefault();
-    try {
-        let id = -1;
-        if (searchParams.has('tache')) {
-            id = parseInt(searchParams.get('tache'));
-        }
-        const select = document.getElementById("etat");
-        const texte = select.options[select.selectedIndex].text;
-        const modifTache = {
-            titre: document.getElementById("titre").value,
-            description: document.getElementById("description").value,
-            etat: texte,
-            dateEch: document.getElementById("dateEch").value
-        };
-        const response = await fetch(`http://localhost:8000/taches/${id}`, {
-            method: "PUT",             
-            headers: {
-                "Content-Type": "application/json" 
-            },
-            body: JSON.stringify(modifTache) 
-        });
-
-        if (!response.ok) {
-            throw new Error(`Erreur HTTP ! statut : ${response.status}`);
-        }
-
-        const data = await response.json();
-        window.location.href = "index.html?ajouter=" + data.id;
-
-    } catch (error) {
-        console.error("Erreur lors de la création :", error);
-    }
-}
-
-async function ajouter(e) {
-    event.preventDefault();
-    try {
-        const nouvelleTache = {
-            titre: document.getElementById("titre").value,
-            description: document.getElementById("description").value,
-            etat: document.getElementById("etat").value,
-            dateEch: document.getElementById("dateEch").value
-        };
-        const response = await fetch("http://localhost:8000/taches/", {
-            method: "POST",             
-            headers: {
-                "Content-Type": "application/json" 
-            },
-            body: JSON.stringify(nouvelleTache) 
-        });
-
-        if (!response.ok) {
-            throw new Error(`Erreur HTTP ! statut : ${response.status}`);
-        }
-
-        const data = await response.json();
-        window.location.href = "index.html?ajouter=" + data.id;
-
-    } catch (error) {
-        console.error("Erreur lors de la création :", error);
-    }
-}
-
-async function donneTacheDetail() {
-    try {
-        if (searchParams.has('tache')) {
-            let id = parseInt(searchParams.get('tache'));
-            const response = await fetch(`http://localhost:8000/taches/${id}`);
-
-            if (!response.ok) {
-                throw new Error("Tâche introuvable");
-            }
-            let tacheJSON = await response.json();
-            return tacheJSON;
-        } else {
-            return null;
-        }
-    } catch (error) {
-        console.error(error);
-        return null;
-    } 
-}
-
+import { donneTacheDetail, ajouter, miseAjour } from "../services/apiTache.js";
 
 /* Fonction qui affiche les informations d'une tâche dans la page de détail, a remplacer par un appel à l'API */
 async function genererDetailModification(idTache) {
-    titreH1 = document.getElementById("titreH1");
+    let titreH1 = document.getElementById("titreH1");
     titreH1.innerHTML = "Modifier une tâche";
 
-    let tacheJSON = await donneTacheDetail();
-
-    if (tacheJSON != null) {
+    if (searchParams.has('tache')) {
+        let id = parseInt(searchParams.get('tache'));
+        let tacheJSON = await donneTacheDetail(id);
 
         let titreTache = document.getElementById("titre");
         titreTache.value = tacheJSON.titre;
@@ -110,7 +27,18 @@ async function genererDetailModification(idTache) {
     lienModifier.innerText = "Modifier";
     lienModifier.href = "index.html?modifier=" + idTache;
     lienModifier.id = "lienModifier";
-    lienModifier.addEventListener('click', miseAjour);
+    lienModifier.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const modifTache = {
+            titre: document.getElementById("titre").value,
+            description: document.getElementById("description").value,
+            etat: document.getElementById("etat").value,
+            dateEch: document.getElementById("dateEch").value
+        };
+        const data = await miseAjour(idTache, modifTache);
+        window.location.href = "index.html?ajouter=" + data.id;
+    });
+
     actions.appendChild(lienModifier);
     let lienAnnuler = document.createElement("a");
     lienAnnuler.innerText = "Annuler";
@@ -120,14 +48,24 @@ async function genererDetailModification(idTache) {
 }
 
 function genererDetailAjout(idTache) {
-    titreH1 = document.getElementById("titreH1");
+    let titreH1 = document.getElementById("titreH1");
     titreH1.innerHTML = "Ajouter une nouvelle tâche";
     let actions = document.getElementById("actions");
     let lienAjouter = document.createElement("a");
     lienAjouter.innerText = "Ajouter";
     lienAjouter.href = "index.html?ajouter=1";
     lienAjouter.id = "lienAjouter";
-    lienAjouter.addEventListener('click', ajouter);
+    lienAjouter.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const nouvelleTache = {
+            titre: document.getElementById("titre").value,
+            description: document.getElementById("description").value,
+            etat: document.getElementById("etat").value,
+            dateEch: document.getElementById("dateEch").value
+        };
+        const data = await ajouter(nouvelleTache);
+        window.location.href = "index.html?ajouter=" + data.id;
+    });
     actions.appendChild(lienAjouter);
     let lienAnnuler = document.createElement("a");
     lienAnnuler.innerText = "Annuler";

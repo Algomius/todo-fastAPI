@@ -1,33 +1,8 @@
-async function supprimer(e) {
-    if (e.target.classList.contains('LienSuppression')) {
-        event.preventDefault();
-        try {
-            const todoId = parseInt(e.target.getAttribute('id').slice(5));
-            const response = await fetch(`http://localhost:8000/taches/${todoId}`, {
-                method: "DELETE"
-            });
-            if (!response.ok) throw new Error("Erreur suppression");
-            window.location.href = "index.html?supprimerTache=" + todoId;
-        } catch  (error) {
-            console.error(error);
-        }
-    }
-}
-
-async function donneTaches() {
-    try {
-        const res = await fetch("http://localhost:8000/taches/");
-        const dataTaches = await res.json();
-        return dataTaches
-    } catch (err) {
-      console.error(err);
-      return null;
-    }
-}
+import { donneTaches, supprimer } from "../services/apiTache.js";
 
 /* Fonction qui génère une information en cas de modification */
 function genererinfo() {
-    info = document.getElementById("info");
+    let info = document.getElementById("info");
 
     const url = new URL(document.location);
     const searchParams = url.searchParams;
@@ -93,7 +68,15 @@ async function genererListe() {
             tachesTable.appendChild(tachesTableLigne);
         } 
     }
-    taches.addEventListener('click', supprimer);
+    taches.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('LienSuppression')) {
+            e.preventDefault();
+            const id = parseInt(e.target.getAttribute('id').slice(5));
+            const data = await supprimer(id);
+            window.location.href = "index.html?supprimerTache=" + id;
+        }
+    });
+
     taches.appendChild(tachesTable);
 }
 
