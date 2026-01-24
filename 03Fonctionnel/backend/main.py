@@ -13,8 +13,6 @@ def get_db():
     finally:
         db.close()
 
-
-
 app = FastAPI(title="API de gestion des tâches", 
               description=
               """
@@ -45,22 +43,29 @@ app.add_middleware(
          description="Toutes les tâche de la BDD se retrouve dans un JSON",
          response_description="Liste de toutes les tâche au format JSON")
 def getAllTache(db : Session = Depends(get_db)):
-    return crud.tache.getTaches(db)
+    try: 
+        db_tache = crud.tache.getTaches(db)
+    except Exception:
+        raise HTTPException(status_code=500, detail="Erreur interne")
+    return db_tache
 
 @app.get("/taches/{tache_id}")
 def getTache(tache_id : int, db : Session = Depends(get_db)):
-    db_tache = crud.tache.getTache(tache_id, db)
+    try:
+        db_tache = crud.tache.getTache(tache_id, db)
+    except Exception:
+        raise HTTPException(status_code=500, detail="Erreur interne")
     if not db_tache:
         raise HTTPException(status_code=404, detail="Tâche non trouvée")
     return db_tache
 
 @app.post("/taches/")
 def createTache(t : TacheCreation, db : Session = Depends(get_db)):
-    #try:
-    db_tache = crud.tache.createTache(t, db)
+    try:
+        db_tache = crud.tache.createTache(t, db)
+    except Exception:
+        raise HTTPException(status_code=500, detail="Erreur interne")
     return db_tache
-    #except Exception:
-    #    raise HTTPException(status_code=500, detail="Erreur interne")
 
 @app.put("/taches/{tache_id}")
 def updateTache(tache_id : int, t : TacheMiseajour, db : Session = Depends(get_db)):
@@ -80,4 +85,4 @@ def deleteTache(tache_id : int, db : Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail="Erreur interne")
     if not deleted:
         raise HTTPException(status_code=404, detail="Tâche non trouvée")
-
+    return {"message": "La tache a été supprimée avec succès", "id": tache_id}

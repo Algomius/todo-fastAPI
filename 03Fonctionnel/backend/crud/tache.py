@@ -16,7 +16,6 @@ def createTache(tache : TacheCreation, db : Session):
         db.refresh(db_tache)
         return db_tache
     except SQLAlchemyError as e:
-        print("ERREUR SQL :", repr(e))
         db.rollback()
         raise
 
@@ -40,10 +39,18 @@ def updateTache(id : int, tache : TacheCreation, db : Session):
         raise
 
 def getTache(id : int, db : Session):
-    return db.query(Tache).filter(Tache.id == id).first()
+    try:
+        db_tache = db.query(Tache).filter(Tache.id == id).first()
+        return db_tache
+    except SQLAlchemyError:
+        raise
 
 def getTaches(db : Session):
-    return db.query(Tache).all()
+    try:
+        db_tache = db.query(Tache).all()
+        return db_tache
+    except SQLAlchemyError:
+        raise 
 
 def deleteTache(id : int, db : Session):
     try:

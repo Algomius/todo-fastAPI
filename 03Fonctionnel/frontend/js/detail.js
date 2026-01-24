@@ -5,22 +5,16 @@ async function genererDetailModification(idTache) {
     let titreH1 = document.getElementById("titreH1");
     titreH1.innerHTML = "Modifier une tâche";
 
-    if (searchParams.has('tache')) {
-        let id = parseInt(searchParams.get('tache'));
-        let tacheJSON = await donneTacheDetail(id);
+    let tacheJSON = await donneTacheDetail(idTache);
 
-        let titreTache = document.getElementById("titre");
-        titreTache.value = tacheJSON.titre;
-
-        let descriptionTache = document.getElementById("description");
-        descriptionTache.value = tacheJSON.description;
-
-        let etatTache = document.getElementById("etat");
-        etatTache.value = tacheJSON.etat;
-
-        let dateEch = document.getElementById("dateEch");
-        dateEch.value = tacheJSON.dateEch;
-    }
+    let titreTache = document.getElementById("titre");
+    titreTache.value = tacheJSON.titre;
+    let descriptionTache = document.getElementById("description");
+    descriptionTache.value = tacheJSON.description;
+    let etatTache = document.getElementById("etat");
+    etatTache.value = tacheJSON.etat;
+    let dateEch = document.getElementById("dateEch");
+    dateEch.value = tacheJSON.dateEch;
 
     let actions = document.getElementById("actions");
     let lienModifier = document.createElement("a");
@@ -67,6 +61,7 @@ function genererDetailAjout(idTache) {
         window.location.href = "index.html?ajouter=" + data.id;
     });
     actions.appendChild(lienAjouter);
+    
     let lienAnnuler = document.createElement("a");
     lienAnnuler.innerText = "Annuler";
     lienAnnuler.href = "index.html?annulerAjouter=1";

@@ -20,7 +20,6 @@ function genererinfo() {
     } else {
         info.innerText = "";
     }
-
 }
 
 /* Fonction qui génère les taches sur la page d'accueil à remplacer par un appel à l'API */
@@ -34,19 +33,18 @@ async function genererListe() {
     /* Création de la liste des taches */
     let tachesTable = document.createElement("table");
     let tachesTableEntete = document.createElement("tr");
+
     let tachesTableEnteteTitre = document.createElement("th");
     tachesTableEnteteTitre.innerHTML = "Titre";
     tachesTableEntete.appendChild(tachesTableEnteteTitre);
+
     let tachesTableEnteteVide = document.createElement("th");
     tachesTableEntete.appendChild(tachesTableEnteteVide);
     tachesTableEntete.appendChild(tachesTableEnteteVide);
     tachesTable.appendChild(tachesTableEntete);
 
     /* Parcourir les données d'actualité */
-
     const dataTaches = await donneTaches();
-    console.log(dataTaches)
-
     if (dataTaches != null) {
 
         for (let dataElement of dataTaches) {
@@ -54,29 +52,27 @@ async function genererListe() {
             let tachesTableLigneTitre = document.createElement("td");
             tachesTableLigneTitre.innerHTML = dataElement.titre;
             tachesTableLigne.appendChild(tachesTableLigneTitre);
+
             let tachesTableLigneModifier = document.createElement("td");
             tachesTableLigneModifier.innerHTML = "<a href=detail.html?tache=" + dataElement.id + ">Modifier</a>";
-            tachesTableLigne.appendChild(tachesTableLigneModifier);   
+            tachesTableLigne.appendChild(tachesTableLigneModifier); 
+
             let tachesTableLigneSupprimer = document.createElement("td");
             let tachesTableLigneSupprimerLien = document.createElement("a");
             tachesTableLigneSupprimerLien.innerText = "Supprimer";
             tachesTableLigneSupprimerLien.href = "index.html?supprimerTache=" + dataElement.id;
             tachesTableLigneSupprimerLien.id = "Suppr" + dataElement.id;
             tachesTableLigneSupprimerLien.classList.add("LienSuppression");
+            tachesTableLigneSupprimerLien.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const data = await supprimer(dataElement.id);
+                window.location.href = "index.html?supprimerTache=" + data.id;
+            });
             tachesTableLigneSupprimer.appendChild(tachesTableLigneSupprimerLien);
             tachesTableLigne.appendChild(tachesTableLigneSupprimer);   
             tachesTable.appendChild(tachesTableLigne);
         } 
     }
-    taches.addEventListener('click', async (e) => {
-        if (e.target.classList.contains('LienSuppression')) {
-            e.preventDefault();
-            const id = parseInt(e.target.getAttribute('id').slice(5));
-            const data = await supprimer(id);
-            window.location.href = "index.html?supprimerTache=" + id;
-        }
-    });
-
     taches.appendChild(tachesTable);
 }
 
