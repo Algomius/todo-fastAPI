@@ -40,8 +40,8 @@ app.add_middleware(
 
 @app.get("/taches/",
          summary="Récupérer toutes les tâches",
-         description="Toutes les tâche de la BDD se retrouve dans un JSON",
-         response_description="Liste de toutes les tâche au format JSON")
+         description="Toutes les tâche de la table tache se retrouvent dans un JSON",
+         response_description="Liste de toutes les tâches au format JSON")
 def getAllTache(db : Session = Depends(get_db)):
     try: 
         db_tache = crud.tache.getTaches(db)
