@@ -3,11 +3,12 @@ const API_BASE = "http://localhost:8000/taches/"
 // GET - Toutes les tâches
 export async function donneTaches() {
     try {
-        const res = await fetch(`${API_BASE}`);
-        const dataTaches = await res.json();
-        return dataTaches
-    } catch (err) {
-      console.error(err);
+        const response = await fetch(`${API_BASE}`);
+        if (!response.ok) throw new Error(`Erreur HTTP ! statut : ${response.status}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+      console.error(error);
     }
 }
 
@@ -15,11 +16,9 @@ export async function donneTaches() {
 export async function donneTacheDetail(id) {
     try {
         const response = await fetch(`${API_BASE}${id}`);
-        if (!response.ok) {
-            throw new Error("Tâche introuvable");
-        }
-        let tacheJSON = await response.json();
-        return tacheJSON;
+        if (!response.ok) throw new Error(`Erreur HTTP ! statut : ${response.status}`);
+        const data = await response.json();
+        return data;
     } catch (error) {
         console.error(error);
     } 
@@ -35,9 +34,7 @@ export async function ajouter(nouvelleTache) {
             },
             body: JSON.stringify(nouvelleTache) 
         });
-        if (!response.ok) {
-            throw new Error(`Erreur HTTP ! statut : ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`Erreur HTTP ! statut : ${response.status}`);
         const data = await response.json();
         return data;
     } catch (error) {
@@ -55,9 +52,7 @@ export async function miseAjour(id, modifTache) {
             },
             body: JSON.stringify(modifTache) 
         });
-        if (!response.ok) {
-            throw new Error(`Erreur HTTP ! statut : ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`Erreur HTTP ! statut : ${response.status}`);
         const data = await response.json();
         return data;
     } catch (error) {
@@ -71,7 +66,7 @@ export async function supprimer(id) {
         const response = await fetch(`${API_BASE}${id}`, {
             method: "DELETE"
         });
-        if (!response.ok) throw new Error("Erreur suppression");
+        if (!response.ok) throw new Error(`Erreur HTTP ! statut : ${response.status}`);
         const data = await response.json();
         return data;
     } catch  (error) {
