@@ -9,8 +9,10 @@ async function genererDetailModification(idTache) {
 
     let titreTache = document.getElementById("titre");
     titreTache.value = tacheJSON.titre;
+
     let descriptionTache = document.getElementById("description");
     descriptionTache.value = tacheJSON.description;
+    
     let etatTache = document.getElementById("etat");
     etatTache.value = tacheJSON.etat;
     let dateEch = document.getElementById("dateEch");

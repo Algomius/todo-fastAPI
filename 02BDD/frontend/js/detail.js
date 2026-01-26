@@ -1,6 +1,6 @@
 /* Fonction qui affiche les informations d'une tâche dans la page de détail, a remplacer par un appel à l'API */
 function genererDetailModification(idTache) {
-    titreH1 = document.getElementById("titreH1");
+    let titreH1 = document.getElementById("titreH1");
     titreH1.innerHTML = "Modifier une tâche";
     let tacheJSON = dataTaches.find(t=>t.id === idTache);
 
@@ -31,7 +31,7 @@ function genererDetailModification(idTache) {
 }
 
 function genererDetailAjout(idTache) {
-    titreH1 = document.getElementById("titreH1");
+    let titreH1 = document.getElementById("titreH1");
     titreH1.innerHTML = "Ajouter une nouvelle tâche";
     let actions = document.getElementById("actions");
     let lienAjouter = document.createElement("a");
@@ -45,6 +45,7 @@ function genererDetailAjout(idTache) {
 
 
     actions.appendChild(lienAjouter);
+    
     let lienAnnuler = document.createElement("a");
     lienAnnuler.innerText = "Annuler";
     lienAnnuler.href = "index.html?annulerAjouter=1";

@@ -1,7 +1,7 @@
 
 /* Fonction qui génère une information en cas de modification */
 function genererinfo() {
-    info = document.getElementById("info");
+    let info = document.getElementById("info");
 
     const url = new URL(document.location);
     const searchParams = url.searchParams;
@@ -19,7 +19,6 @@ function genererinfo() {
     } else {
         info.innerText = "";
     }
-
 }
 
 /* Fonction qui génère les taches sur la page d'accueil à remplacer par un appel à l'API */
@@ -33,9 +32,11 @@ function genererListe() {
     /* Création de la liste des taches */
     let tachesTable = document.createElement("table");
     let tachesTableEntete = document.createElement("tr");
+
     let tachesTableEnteteTitre = document.createElement("th");
     tachesTableEnteteTitre.innerHTML = "Titre";
     tachesTableEntete.appendChild(tachesTableEnteteTitre);
+
     let tachesTableEnteteVide = document.createElement("th");
     tachesTableEntete.appendChild(tachesTableEnteteVide);
     tachesTableEntete.appendChild(tachesTableEnteteVide);
@@ -47,32 +48,27 @@ function genererListe() {
         let tachesTableLigneTitre = document.createElement("td");
         tachesTableLigneTitre.innerHTML = dataElement.titre;
         tachesTableLigne.appendChild(tachesTableLigneTitre);
+
         let tachesTableLigneModifier = document.createElement("td");
         tachesTableLigneModifier.innerHTML = "<a href=detail.html?tache=" + dataElement.id + ">Modifier</a>";
-        tachesTableLigne.appendChild(tachesTableLigneModifier);   
+        tachesTableLigne.appendChild(tachesTableLigneModifier);
+           
         let tachesTableLigneSupprimer = document.createElement("td");
         let tachesTableLigneSupprimerLien = document.createElement("a");
         tachesTableLigneSupprimerLien.innerText = "Supprimer";
         tachesTableLigneSupprimerLien.href = "index.html?supprimerTache=" + dataElement.id;
         tachesTableLigneSupprimerLien.id = "Suppr" + dataElement.id;
         tachesTableLigneSupprimerLien.classList.add("LienSuppression");
+        tachesTableLigneSupprimerLien.addEventListener('click', function(e) {
+            const todoId = e.target.getAttribute('id');
+            // C'est ici que se passe l'appel à l'API pour la suppression
+            console.log('Suppression de la tâche', todoId);
+        });
         tachesTableLigneSupprimer.appendChild(tachesTableLigneSupprimerLien);
         tachesTableLigne.appendChild(tachesTableLigneSupprimer);   
         tachesTable.appendChild(tachesTableLigne);
     } 
-
     taches.appendChild(tachesTable);
-
-    taches.addEventListener('click', function(e) {
-    if (e.target.classList.contains('LienSuppression')) {
-        
-        const todoId = e.target.getAttribute('id');
-        
-        // C'est ici que se passe l'appel à l'API pour la suppression
-        console.log('Suppression de la tâche', todoId);
-        
-    }
-});
 }
 
 genererinfo();
