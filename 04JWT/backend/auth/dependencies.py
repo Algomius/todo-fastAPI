@@ -8,8 +8,8 @@ from .jwt import decode_access_token
 api_key_header = APIKeyHeader(name="Authorization")
 
 def get_current_user(token: str = Security(api_key_header), db: Session = Depends(get_db)) -> Utilisateur:
-    if token.startswith("Bearer "):
-        token = token[7:]
+    #if token.startswith("Bearer "):
+    #    token = token[7:]
     payload = decode_access_token(token)
     if not payload:
         raise HTTPException(status_code=401, detail="Invalid token")

@@ -7,7 +7,7 @@ from models.utilisateur import Utilisateur
 from db.database import get_db
 from sqlalchemy.orm import Session
 import crud.tache
-from auth.depedencies import get_current_user
+from auth.dependencies import get_current_user
 from auth.routes import router as auth_router
 
 app = FastAPI(title="API de gestion des tâches", 

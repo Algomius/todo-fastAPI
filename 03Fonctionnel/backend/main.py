@@ -2,16 +2,9 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from schemas.tachecreation import TacheCreation
 from schemas.tachemiseajour import TacheMiseajour
-from db.database import SessionLocal
+from db.database import get_db
 from sqlalchemy.orm import Session
 import crud.tache
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 app = FastAPI(title="API de gestion des tâches", 
               description=
