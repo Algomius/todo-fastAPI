@@ -5,3 +5,4 @@
 ## 02BDD - Ajout d'une base de données postgreSQL et de l'orm SQLAlchemy
 ## 03Fonctionnel - Appels à l'API dans le frontend
 ## 04JWT - Ajout de l'authentification
+## 05JWTetFront - Appels des routes d'authentification (/register, /login, /refresh) de l'API dans le frontend 
