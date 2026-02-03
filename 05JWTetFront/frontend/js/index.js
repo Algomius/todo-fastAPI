@@ -1,4 +1,5 @@
 import { donneTaches, supprimer } from "../services/apiTache.js";
+import { connexionUtilisateur } from "../services/apiTacheAuth.js";
 
 /* Fonction qui génère une information en cas de modification */
 function genererinfo() {
@@ -17,6 +18,8 @@ function genererinfo() {
         info.innerText = "Aucune tâche n'a été ajoutée, création annulée";
     } else if (searchParams.has('supprimerTache')){
         info.innerText = "La tâche "+ searchParams.get('supprimerTache') +" a été supprimée avec succès";
+    } else if (searchParams.has('nouvelUtilisateur'))   {
+        info.innerText = "L'utilisateur "+ searchParams.get('nouvelUtilisateur') +" a été créé avec succès";
     } else {
         info.innerText = "";
     }
@@ -24,6 +27,7 @@ function genererinfo() {
 
 /* Fonction qui génère les taches sur la page d'accueil à remplacer par un appel à l'API */
 async function genererListe() {
+    document.getElementById("connexion").remove();
     /* Vider le contenu de la section des taches */
     let taches = document.getElementById("taches");
     while (taches.firstChild) {
@@ -76,5 +80,28 @@ async function genererListe() {
     taches.appendChild(tachesTable);
 }
 
+function genererConnexion() {
+    document.getElementById("contenu").remove();
+
+    const lienConnexion = document.getElementById("lienConnexion");
+    lienConnexion.addEventListener('click', async(e) => {
+        e.preventDefault()
+        let infosConnexion = {
+            pseudonyme: document.getElementById("pseudo").value,
+            motDePasse: document.getElementById("passe").value
+        };
+        const data = await connexionUtilisateur(infosConnexion);
+        if (data) {
+            window.location.href = "index.html";
+        } else {
+            console.log("Erreur API");  
+        }
+    });
+}
+
 genererinfo();
-genererListe();
+if (localStorage.getItem('access_token')) {
+    genererListe();
+} else {
+    genererConnexion();
+}

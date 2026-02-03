@@ -9,7 +9,7 @@ from .jwt import create_access_token, create_refresh_token, decode_refresh_token
 
 router = APIRouter()
 
-@router.post("/register")
+@router.post("/register/")
 def register(user: UtilisateurCreation, db: Session = Depends(get_db)):
     user.motDePasse = hash_password(user.motDePasse)
     db_user = Utilisateur(pseudonyme = user.pseudonyme,
@@ -18,9 +18,9 @@ def register(user: UtilisateurCreation, db: Session = Depends(get_db)):
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
-    return {"message": "Utilisateur créé"}
+    return {"message": "Utilisateur créé", "pseudonyme" : db_user.pseudonyme}
 
-@router.post("/login")
+@router.post("/login/")
 def login(user: UtilisateurInfo, db: Session = Depends(get_db)):
     db_user = db.query(Utilisateur).filter(Utilisateur.pseudonyme == user.pseudonyme).first()
     if not db_user or not verify_password(user.motDePasse, db_user.motDePasse):
@@ -30,7 +30,7 @@ def login(user: UtilisateurInfo, db: Session = Depends(get_db)):
     refresh_token = create_refresh_token({"sub": str(db_user.id), "type": "refresh"})
     return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
 
-@router.post("/refresh")
+@router.post("/refresh/")
 def refresh_token(refresh_token: str, db: Session = Depends(get_db)):
     payload = decode_refresh_token(refresh_token)
     if not payload:
