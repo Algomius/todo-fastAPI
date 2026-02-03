@@ -62,7 +62,7 @@ export async function rafraichirToken() {
 }
 
 // LOGOUT - Sortir de l'application
-async function deconnexion() {
+function deconnexion() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refesh_token');
     window.location.href = 'index.html';

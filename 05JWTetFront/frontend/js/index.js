@@ -90,12 +90,8 @@ function genererConnexion() {
             pseudonyme: document.getElementById("pseudo").value,
             motDePasse: document.getElementById("passe").value
         };
-        const data = await connexionUtilisateur(infosConnexion);
-        if (data) {
-            window.location.href = "index.html";
-        } else {
-            console.log("Erreur API");  
-        }
+        await connexionUtilisateur(infosConnexion);
+        window.location.href = "index.html";
     });
 }
 
