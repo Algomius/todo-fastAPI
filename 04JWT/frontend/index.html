@@ -15,8 +15,28 @@
         <main>
             <h1>Ma super Todo List</h1>
             <h2 id="info"></h2>
-            <a href="detail.html">Ajouter une tâche</a>
-            <section id="taches"></section>
+            <div id="connexion">
+                <form>
+                    <table>
+                        <tr>
+                            <td><label for="pseudo">Pseudonyme&nbsp;:</label></td>
+                            <td><input type="text" id="pseudo" name="user_pseudo"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="passe">Mot de Passe&nbsp;:</label></td>
+                            <td><input type="password" id="passe" name="user_pass"></td>
+                        </tr>
+                    </table>
+                    <div id="actions">
+                        <a href="">Connexion</a>
+                        <a href="inscription.html">Inscrivez-vous</a>
+                    </div>
+                </form>
+            </div>
+            <div id="contenu">
+                <a href="detail.html">Ajouter une tâche</a>
+                <section id="taches"></section>
+            </div>
         </main>
 
         <footer id="pied"> </footer>

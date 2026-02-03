@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Page d'inscription à la todo list api">
+        <meta name="author" content="Algomius">
+        <link rel="stylesheet" href="./style/normalize.css" />
+        <link rel="stylesheet" href="./style/index.css" />
+        <title>Inscription</title>
+    </head>
+    <body>
+        <header id="entete"></header>
+        <main>
+            <h1>Inscription à la super TODO list</h1>
+            <h2 id="info"></h2>
+            <form>
+                <table>
+                    <tr>
+                        <td><label for="pseudo">Pseudonyme&nbsp;:</label></td>
+                        <td><input type="text" id="pseudo" name="user_pseudo"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="mail">Adresse email&nbsp;:</label></td>
+                        <td><input type="email" id="mail" name="user_mail"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="passe">Mot de Passe&nbsp;:</label></td>
+                        <td><input type="password" id="passe" name="user_pass"></td>
+                    </tr>
+                </table>
+                <div id="actions">
+                    <a href="">Inscription</a>
+                    <a href="index.html">Annuler</a>
+                </div>
+            </form>
+        </main>
+        <footer id="pied"> </footer>
+    </body>
+    <script type="module" src="./js/inscription.js"></script>
+</html>
