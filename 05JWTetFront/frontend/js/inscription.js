@@ -13,11 +13,7 @@ lienInscription.addEventListener('click', async (e) => {
             motDePasse: motDePasse
         };
         const data = await creerUtilisateur(nouvelUtilisateur);
-        if (data) {
-            window.location.href = "index.html?nouvelUtilisateur=" + data.pseudonyme;
-        } else {
-            console.log("Erreur API");  
-        }
+        window.location.href = "index.html?nouvelUtilisateur=" + data.pseudonyme;
     } else {
         console.log("Les mots de passes " + motDePasse + " et " + confPass + " ne concordent pas - inscription annulée");
     }

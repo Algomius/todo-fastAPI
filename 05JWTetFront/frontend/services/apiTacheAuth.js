@@ -18,7 +18,6 @@ export async function creerUtilisateur(nouvelUtilisateur) {
     }
 }
 
-
 // login - connexion et récupération d'un token JWT
 export async function connexionUtilisateur(infosConnexion) {
     try {
