@@ -44,7 +44,7 @@ def updateTache(id : int, tache : TacheCreation, current_user : Utilisateur, db 
 
 def getTache(id : int, current_user : Utilisateur, db : Session):
     try:
-        db_tache = db.query(Tache).filter(Tache.id == id, Tache.id_utilisateur == current_user.id).first()
+        db_tache = db.query(Tache).filter(Tache.id == id).first()
         return db_tache
     except SQLAlchemyError:
         raise

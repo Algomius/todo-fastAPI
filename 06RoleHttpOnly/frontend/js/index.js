@@ -1,5 +1,5 @@
 import { donneTaches, supprimer } from "../services/apiTache.js";
-import { connexionUtilisateur } from "../services/apiTacheAuth.js";
+import { connexionUtilisateur, tokenOK, logout } from "../services/apiTacheAuth.js";
 
 /* Fonction qui génère une information en cas de modification */
 function genererinfo() {
@@ -37,9 +37,9 @@ async function genererListe() {
     const dataTaches = await donneTaches();
 
     let unSeulId = true;
-    if (dataTaches != null) {
+    if (dataTaches.length > 0) {
         let premierId = dataTaches[0].id_utilisateur;
-        unSeulId = dataTaches.every(obj => obj[id_utilisateur] === premierId);
+        unSeulId = dataTaches.every(obj => obj.id_utilisateur === premierId);
     }
 
     /* Création de la liste des taches */
@@ -63,7 +63,7 @@ async function genererListe() {
 
     /* Parcourir les données d'actualité */
     
-    if (dataTaches != null) {
+    if (dataTaches.length > 0) {
 
         for (let dataElement of dataTaches) {
             let tachesTableLigne = document.createElement("tr");
@@ -74,7 +74,7 @@ async function genererListe() {
             if (unSeulId == false) {
                 let tachesTableLigneUtilisateur = document.createElement("td");
                 tachesTableLigneUtilisateur.innerHTML = dataElement.id_utilisateur;
-                tachestachesTableLigneTableEntete.appendChild(tachesTableLigneUtilisateur);
+                tachesTableLigne.appendChild(tachesTableLigneUtilisateur);
             }
 
             let tachesTableLigneModifier = document.createElement("td");
@@ -98,6 +98,16 @@ async function genererListe() {
         } 
     }
     taches.appendChild(tachesTable);
+    genererDeconnexion();
+}
+
+function genererDeconnexion() {
+    const lienDeconnexion = document.getElementById("deconnexion");
+    lienDeconnexion.addEventListener('click', async(e) => {
+        e.preventDefault()
+        await logout();
+        window.location.href = "index.html";
+    });
 }
 
 function genererConnexion() {
@@ -116,7 +126,7 @@ function genererConnexion() {
 }
 
 genererinfo();
-if (localStorage.getItem('access_token')) {
+if (await tokenOK()) {
     genererListe();
 } else {
     genererConnexion();

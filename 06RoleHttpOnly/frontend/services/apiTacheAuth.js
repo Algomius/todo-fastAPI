@@ -1,10 +1,11 @@
-const API_AUTH = "http://localhost:8000/auth/"
+const API_AUTH = "http://127.0.0.1:8000/auth/"
 
 // register - Créer un utilisateur
 export async function creerUtilisateur(nouvelUtilisateur) {
     try {
         const response = await fetch(`${API_AUTH}register/`, {
-            method: "POST",             
+            method: "POST",  
+            credentials: "include",              
             headers: {
                 "Content-Type": "application/json" 
             },
@@ -22,7 +23,8 @@ export async function creerUtilisateur(nouvelUtilisateur) {
 export async function connexionUtilisateur(infosConnexion) {
     try {
         const response = await fetch(`${API_AUTH}login/`, {
-            method: "POST",             
+            method: "POST", 
+            credentials: "include",            
             headers: {
                 "Content-Type": "application/json" 
             },
@@ -30,8 +32,6 @@ export async function connexionUtilisateur(infosConnexion) {
         });
         if (!response.ok) throw new Error(`Erreur HTTP ! statut : ${response.status}`);
         const data = await response.json();
-        localStorage.setItem("access_token", data.access_token);
-        localStorage.setItem("refresh_token", data.refresh_token);
     } catch (error) {
       console.error(error);
     } 
@@ -39,30 +39,47 @@ export async function connexionUtilisateur(infosConnexion) {
 
 // refresh - refresh des token access et token refresh
 export async function rafraichirToken() {
-    let token = localStorage.getItem("refresh_token");
     try {
         const response = await fetch(`${API_AUTH}refresh/`, {
-            method: "POST",             
-            headers: {
-                "Content-Type": "application/json" 
-            },
-            body: JSON.stringify({ refresh_token: token })
+            method: "POST",  
+            credentials: "include",              
         });
-        if (response.status_code == 401) {
-            deconnexion();
+        if (response.status == 401) {
+            
+            logout();
         }
         if (!response.ok) throw new Error(`Erreur HTTP ! statut : ${response.status}`);
         const data = await response.json();
-        localStorage.setItem("access_token", data.access_token);
-        localStorage.setItem("refresh_token", data.refresh_token);
     } catch (error) {
       console.error(error);
     } 
 }
 
 // LOGOUT - Sortir de l'application
-function deconnexion() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refesh_token');
-    window.location.href = 'index.html';
+export async function logout() {
+    try {
+        const response = await fetch(`${API_AUTH}logout/`, {
+            method: "POST",  
+            credentials: "include"
+        });
+        if (!response.ok) throw new Error(`Erreur HTTP ! statut : ${response.status}`);
+        window.location.href = 'index.html';
+    } catch (error) {
+      console.error(error);
+    }
+}
+
+// Fonction qui vérifie si l'utilisateur possède un token d'accès valide 
+export async function tokenOK() {
+    try {
+        const response = await fetch(`${API_AUTH}me/`, {
+            method: "GET",  
+            credentials: "include"
+        });
+        if (!response.ok) throw new Error(`Erreur HTTP ! statut : ${response.status}`);
+        return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
 }

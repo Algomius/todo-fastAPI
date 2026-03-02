@@ -1,16 +1,13 @@
 import { rafraichirToken } from "./apiTacheAuth.js";
 
-const API_BASE = "http://localhost:8000/taches/"
+const API_BASE = "http://127.0.0.1:8000/taches/"
 
 // GET - Toutes les tâches
 export async function donneTaches(retry = false) {
     try {
-        let token = localStorage.getItem("access_token");
         const response = await fetch(`${API_BASE}`, {
             method: 'GET',
-            headers: {
-                'Authorization': `${token}`
-            }
+            credentials: "include"
         });
         if (response.status == 401 && retry == false) {
             await rafraichirToken();
@@ -27,12 +24,9 @@ export async function donneTaches(retry = false) {
 // GET - Tâche d'après son identifiant 
 export async function donneTacheDetail(id, retry = false) {
     try {
-        let token = localStorage.getItem("access_token");
         const response = await fetch(`${API_BASE}${id}`, {
             method: 'GET',
-            headers: {
-                'Authorization': `${token}`
-            }
+            credentials: "include"
         });
         if (response.status == 401 && retry == false) {
             await rafraichirToken();
@@ -49,12 +43,11 @@ export async function donneTacheDetail(id, retry = false) {
 // POST - Nouvelle tâche
 export async function ajouter(nouvelleTache, retry = false) {
     try {
-        let token = localStorage.getItem("access_token");
         const response = await fetch(`${API_BASE}`, {
-            method: "POST",             
+            method: "POST",  
+            credentials: "include",             
             headers: {
-                "Content-Type": "application/json", 
-                'Authorization': `${token}`
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(nouvelleTache) 
         });
@@ -73,12 +66,11 @@ export async function ajouter(nouvelleTache, retry = false) {
 // PUT - Modification d'une tâche
 export async function miseAjour(id, modifTache, retry = false) {
     try {
-        let token = localStorage.getItem("access_token");
         const response = await fetch(`${API_BASE}${id}`, {
-            method: "PUT",             
+            method: "PUT",  
+            credentials: "include",             
             headers: {
-                "Content-Type": "application/json",
-                'Authorization': `${token}` 
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(modifTache) 
         });
@@ -97,12 +89,9 @@ export async function miseAjour(id, modifTache, retry = false) {
 // DELETE - Suppression d'une tâche
 export async function supprimer(id, retry = false) {
     try {
-        let token = localStorage.getItem("access_token");
         const response = await fetch(`${API_BASE}${id}`, {
             method: "DELETE",
-            headers: {
-                'Authorization': `${token}` 
-            },
+            credentials: "include"
         });
         if (response.status == 401 && retry == false) {
             await rafraichirToken();

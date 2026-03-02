@@ -25,8 +25,7 @@ app.include_router(auth_router, prefix="/auth", tags=["auth"])
 
 origins = [
     "http://localhost:3000",  # React
-    "http://127.0.0.1:5500",  # fichier HTML ouvert directement
-    "*"                       #  '*' pour autoriser tous les fronts (dev seulement)
+    "http://127.0.0.1:5500"  # fichier HTML ouvert directement
 ]
 
 app.add_middleware(

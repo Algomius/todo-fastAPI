@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException, Security
+from fastapi import Depends, HTTPException, Request
 from fastapi.security.api_key import APIKeyHeader
 from sqlalchemy.orm import Session
 from db.database import get_db
@@ -7,13 +7,13 @@ from .jwt import decode_access_token
 
 api_key_header = APIKeyHeader(name="Authorization")
 
-def get_current_user(token: str = Security(api_key_header), db: Session = Depends(get_db)) -> Utilisateur:
-    #if token.startswith("Bearer "):
-    #    token = token[7:]
+def get_current_user(request : Request, db: Session = Depends(get_db)) -> Utilisateur:
+    token = request.cookies.get("access_token")
+    if not token:
+        raise HTTPException(status_code=401, detail="Invalid token")
     payload = decode_access_token(token)
     if not payload:
         raise HTTPException(status_code=401, detail="Invalid token")
-
     user_id = payload.get("sub")
     user = db.query(Utilisateur).filter(Utilisateur.id == int(user_id)).first()
     if not user:
