@@ -31,9 +31,6 @@ def login(user: UtilisateurInfo, response : Response, db: Session = Depends(get_
     access_token = create_access_token({"sub": str(db_user.id), "type": "access"})
     refresh_token = create_refresh_token({"sub": str(db_user.id), "type": "refresh"})
 
-    print(access_token)
-    print(refresh_token)
-
     response.set_cookie(
         key="access_token",
         value=access_token,
@@ -94,7 +91,7 @@ def get_me( access_token: str = Cookie(None)):
     except Exception:
         raise HTTPException(status_code=401, detail="Token invalide")
     
-@router.post("/logout")
+@router.post("/logout/")
 def logout(response: Response):
     response.delete_cookie("access_token")
     response.delete_cookie("refresh_token")

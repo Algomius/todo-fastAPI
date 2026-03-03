@@ -5,8 +5,6 @@ from db.database import get_db
 from models.utilisateur import Utilisateur
 from .jwt import decode_access_token
 
-api_key_header = APIKeyHeader(name="Authorization")
-
 def get_current_user(request : Request, db: Session = Depends(get_db)) -> Utilisateur:
     token = request.cookies.get("access_token")
     if not token:
