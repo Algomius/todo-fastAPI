@@ -1,0 +1,12 @@
+create database apitache;
+\c apitache;
+CREATE USER apitacheuser with password 'mdp';
+GRANT CONNECT ON DATABASE "apitache" to apitacheuser;
+grant usage on schema public TO apitacheuser;
+grant create on schema public TO apitacheuser;
+grant all privileges on all tables in schema public to apitacheuser;
+grant all privileges on all sequences in schema public to apitacheuser;
+grant all privileges on all functions in schema public to apitacheuser;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO apitacheuser;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO apitacheuser;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON FUNCTIONS TO apitacheuser;
