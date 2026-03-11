@@ -10,3 +10,6 @@ venv/
 
 # Version d'alembics
 versions/
+
+# Certificats pour le HTTPS
+certificats/
