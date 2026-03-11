@@ -35,15 +35,15 @@ def login(user: UtilisateurInfo, response : Response, db: Session = Depends(get_
         key="access_token",
         value=access_token,
         httponly=True,
-        secure=False,  
-        samesite="Lax"
+        secure=True,  
+        samesite="None"
     )
     response.set_cookie(
         key="refresh_token",
         value=refresh_token,
         httponly=True,
-        secure=False,
-        samesite="Lax"
+        secure=True,
+        samesite="None"
     )
 
     return {"message": "Connecté !"}
@@ -68,15 +68,15 @@ def refresh_token(request : Request, response : Response, db: Session = Depends(
         key="access_token",
         value=access_token,
         httponly=True,
-        secure=False,
-        samesite="Lax"
+        secure=True,
+        samesite="None"
     )
     response.set_cookie(
         key="refresh_token",
         value=refresh_token,
         httponly=True,
-        secure=False,
-        samesite="Lax"
+        secure=True,
+        samesite="None"
     )
 
     return {"message": "Connecté !"}

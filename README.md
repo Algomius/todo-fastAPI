@@ -7,3 +7,4 @@
 ## 04JWT - Ajout de l'authentification
 ## 05JWTetFront - Appels des routes d'authentification (/register, /login, /refresh) de l'API dans le frontend 
 ## 06RoleHttpOnly - Ajout de la notion de rôle au niveau des utilisateur et utilisation des cookies httponly pour stocker les token JWT 
+## 0HTTPSNginx - Ajout d'un serveur Nginx pour gérer une connexion https entre le front et le back

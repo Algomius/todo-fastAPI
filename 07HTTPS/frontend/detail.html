@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="On plonge dans le détail de la liste">
+        <meta name="author" content="Algomius">
+        <link rel="stylesheet" href="./style/normalize.css" />
+        <link rel="stylesheet" href="./style/index.css" />
+        <title>Détail d'une liste</title>
+    </head>
+    <body>
+        <header id="entete"></header>
+
+        <main>
+            <h1 id="titreH1">Détail d'une liste</h1>
+            <section id="tache">
+                <form>
+                    <table>
+                        <tr>
+                            <td><label for="titre">Titre&nbsp;:</label></td>
+                            <td><input type="text" id="titre" name="tache_titre"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="description">Description&nbsp;:</label></td>
+                            <td><input type="text" id="description" name="tache_description"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="etat">Etat&nbsp;:</label></td>
+                            <td>
+                                <select id="etat" name="tache_etat">
+                                    <option value="">--Veuillez choisir un état--</option>
+                                    <option value="A faire">A faire</option>
+                                    <option value="En Cours">En Cours</option>
+                                    <option value="Terminée">Terminée</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label for="dateEch">Date échéance&nbsp;</label></td>
+                            <td><input type="date" id="dateEch"></td>
+                        </tr>
+                    </table>
+                    <div id="actions"></div>
+                </form>
+            </section>
+        </main>
+
+        <footer id="pied"> </footer>
+    </body>
+    <script type="module" src="./js/detail.js"></script>
+</html>
